@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<style>
+.welcome-container {
+    position: absolute;
+    margin: auto;
+    height: 50px;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    text-align: center;
+    transform: (-50%, -50%);
+    animation-name: title;
+    animation-duration: 1.5s;
+    animation-fill-mode: forwards;
+}
+@keyframes title {
+  0% {left: 0; right: 0; top:0; bottom: 0}
+  100% {left: 0; right: 0; top: 0; bottom : 80%}
+}
+
+@keyframes player {
+    0% {opacity: 0;}
+    100% {opacity: 1;}
+}
+
+.body-container {
+    width: 100%;
+    opacity: 0;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin-top: 200px;
+    top: 15%;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    animation-name: player;
+    animation-duration: 1s;
+    animation-delay: 0.5s;
+    animation-fill-mode: forwards;
+}
+
+.player-container {
+    width: 400;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    text-align: center;
+}
+
+.left{
+    margin-right: 100px;
+    align-items: flex-end;
+}
+.right{
+    margin-left: 100px;
+    align-self: flex-end;
+}
+
+.img-container {
+    display: flex;
+    flex-direction: column;
+}
+
+img {
+    width: 50px;
+    height: 50px;
+    margin-bottom: 20px;
+}
+
+.right > .img-container > img{
+    -webkit-transform: scaleX(-1);
+    transform: scaleX(-1);
+}
+
+.left > .img-container > img:hover {
+    box-shadow: 4px 2px 5px 1px #969696;
+    -webkit-box-shadow: 4px 2px 5px 1px #969696;
+}
+
+</style>
+<body>
+    <div class="welcome-container">
+        <h3>Welcome to Rock Paper and Scissors!</h3>
+    </div>
+    <div class="body-container">
+        <div class="player-container left">
+            <h2>
+                <span>You:</span>
+                <span id="player_score">0</span>
+            </h2>
+            <div class="img-container">
+                <img id="user_rock" src="./rock.png"/>
+                <img id="user_paper" src="./paper.png"/>
+                <img id="user_scissors" src="./scissors.png"/>
+            </div>
+
+        </div>
+        <h2><span>Draw: </span> <span id="draw_score">0</span></h2>
+        <div class="player-container right">
+            <h2>
+                <span>Browser:</span>
+                <span id="ai_score">0</span>
+            </h2>
+            <div class="img-container">
+                <img id="ai_rock" src="./rock.png"/>
+                <img id="ai_paper" src="./paper.png"/>
+                <img id="ai_scissors" src="./scissors.png"/>
+            </div>
+
+        </div>
+    </div>
+    <div>
+        <p>Code generate ai result:</p>
+        <pre>
+            function getAiResult() { <br>
+                return Math.floor(Math.random() * 3)<br>
+            } <br>
+        </pre>
+        <p>Code logic for win/draw/lose:</p>
+        <pre>
+             // 0: rock  1: paper 2: scissors<br>
+            function onUserMakeSelection(i) {<br>
+                const aiResult = getAiResult();<br>
+                onAiMakeSelection(aiResult); // handle css chage<br>
+                if(i === aiResult + 1 || (i === 0 && aiResult === 2)){<br>
+                    p_score += 1;<br>
+                    player_score.innerText = p_score;<br>
+                } else if(i === aiResult){<br>
+                    d_score += 1;<br>
+                    draw_score.innerText = d_score;<br>
+                } else {<br>
+                    a_score += 1;<br>
+                    ai_score.innerText = a_score;<br>
+                }<br>
+            }
+        </pre>
+    </div>
+
+</body>
+
+<script>
+const user_rock = document.getElementById('user_rock');
+const user_paper = document.getElementById('user_paper');
+const user_scissors = document.getElementById('user_scissors');
+const ai_rock = document.getElementById('ai_rock');
+const ai_paper = document.getElementById('ai_paper');
+const ai_scissors =document.getElementById('ai_scissors');
+
+const player_score = document.getElementById('player_score');
+const ai_score = document.getElementById('ai_score');
+const draw_score = document.getElementById('draw_score');
+
+function getAiResult() {
+    return Math.floor(Math.random() * 3)
+}
+
+var p_score = 0;
+var a_score = 0;
+var d_score = 0;
+
+function reset() {
+    p_score = 0;
+    a_score = 0;
+    d_score = 0;
+
+}
+
+/*
+0: rock
+1: paper
+2: scissors
+*/
+function onUserMakeSelection(i) {
+    const aiResult = getAiResult();
+    onAiMakeSelection(aiResult);
+    if(i === aiResult + 1 || (i === 0 && aiResult === 2)){
+        p_score += 1;
+        player_score.innerText = p_score;
+    } else if(i === aiResult){
+        d_score += 1;
+        draw_score.innerText = d_score;
+    } else {
+        a_score += 1;
+        ai_score.innerText = a_score;
+    }
+}
+
+function onAiMakeSelection(i){
+    if(i === 0){
+        ai_paper.style.opacity = 0
+        ai_scissors.style.opacity = 0
+        ai_rock.style.opacity = 1
+    } else if (i === 1){
+        ai_rock.style.opacity = 0
+        ai_scissors.style.opacity = 0
+        ai_paper.style.opacity = 1
+    } else {
+        ai_rock.style.opacity = 0
+        ai_paper.style.opacity = 0
+        ai_scissors.style.opacity = 1
+    }
+}
+
+user_rock.onclick = (e) => {
+    onUserMakeSelection(0)
+}
+user_paper.onclick = (e) => {
+    onUserMakeSelection(1)
+}
+user_scissors.onclick = (e) => {
+    onUserMakeSelection(2)
+}
+
+
+</script>
